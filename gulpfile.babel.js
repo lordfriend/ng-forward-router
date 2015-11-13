@@ -18,11 +18,13 @@ const tsBuildProject = ts.createProject('tsconfig.json', {
 
 function typescriptToES6() {
     let result = tsBuildProject.src()
-        .pipe(sourcemaps.init())
+        //.pipe(sourcemaps.init())
         .pipe(ts(tsBuildProject));
 
     return merge([
-        result.js.pipe(sourcemaps.write()).pipe(gulp.dest('dist')),
+        result.js
+            //.pipe(sourcemaps.write())
+            .pipe(gulp.dest('dist')),
         result.dts.pipe(gulp.dest('dist'))
     ])
 }
@@ -70,7 +72,7 @@ gulp.task('build', (done) => {
         'build/ts-to-es6',
         //'build/lib-to-es6',
         //'clean-up',
-        //'test',
+        'test',
         done
     )
 });

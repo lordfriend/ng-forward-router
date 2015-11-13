@@ -3,10 +3,13 @@ module.exports = function(config) {
     var options = {
         basePath: 'dist',
         browsers: ['Chrome'],
-        frameworks: ['browserify', 'mocha', 'chai'],
+        frameworks: ['browserify', 'angular', 'mocha', 'chai'],
+        angular: ['angular'],
         reports: ['mocha'],
         plugins: ['karma-*'],
         files: [
+            '../node_modules/reflect-metadata/Reflect.js',
+            '../node_modules/ui-router/release/angular-ui-router.js',
             'lib/*.js',
             'lib/*.spec.js'
         ],
@@ -18,7 +21,8 @@ module.exports = function(config) {
             watch: false,
             transform: [
                 ['babelify', {presets: 'es2015'}]
-            ]
+            ],
+            extensions: ['.js']
         }
     };
 

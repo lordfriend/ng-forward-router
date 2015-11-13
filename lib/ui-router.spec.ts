@@ -21,7 +21,7 @@ describe('Bootstrap and state configuration', () => {
         })
         class MyApp {}
 
-        injector = bootstrap(MyApp);
+        injector = bootstrap(MyApp, ['ui.router']);
 
     });
 
@@ -31,15 +31,19 @@ describe('Bootstrap and state configuration', () => {
     });
 
     it('returns the injector', () => {
+        console.log(injector);
         injector.should.respondTo('get');
         injector.get('myAppDirective')[0].should.have.property('name', 'myApp');
     });
 
     it('have a state config', () => {
         let $state = injector.get('$state');
-        $state.get().name.should.eqls('Home');
-        $state.get().controller.name.should.eqls('MyApp');
-        $state.get().url.should.eqls('/');
-        $state.get().template.should.eqls(templateStr);
+        let stateObj = $state.get()[1];
+        $state.get().length.should.eq(2);
+        console.log($state.get());
+        stateObj.name.should.eqls('Home');
+        stateObj.controller.name.should.eqls('MyApp');
+        stateObj.url.should.eqls('/');
+        stateObj.template.should.eqls(templateStr);
     });
 });
