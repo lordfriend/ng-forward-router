@@ -1,14 +1,25 @@
 
 module.exports = function(config) {
     var options = {
+        basePath: 'dist',
         browsers: ['Chrome'],
-        frameworks: ['systemjs', 'mocha', 'chai'],
+        frameworks: ['browserify', 'mocha', 'chai'],
         reports: ['mocha'],
         plugins: ['karma-*'],
-        //preprocessor: {
-        //    'dist/{**/}*.js': ['babel'],
-        //    'test/{**/}*.spec.js': ['babel']
-        //},
+        files: [
+            'lib/*.js',
+            'lib/*.spec.js'
+        ],
+        preprocessors: {
+            'lib/*.js': ['browserify'],
+            'lib/*.spec.js': ['browserify']
+        },
+        browserify: {
+            watch: false,
+            transform: [
+                ['babelify', {presets: 'es2015'}]
+            ]
+        }
     };
 
     config.set(options);

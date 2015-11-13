@@ -68,8 +68,8 @@ gulp.task('build', (done) => {
     runSequence(
         'delete-dist',
         'build/ts-to-es6',
-        'build/lib-to-es6',
-        'clean-up',
+        //'build/lib-to-es6',
+        //'clean-up',
         //'test',
         done
     )
