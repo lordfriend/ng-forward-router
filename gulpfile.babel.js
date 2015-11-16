@@ -9,14 +9,14 @@ import {Server as KarmaServer, LOG} from 'Karma';
 import {join} from 'path';
 import filter from 'gulp-filter';
 
-const tsconfig = require('./tsconfig.json');
-const tsBuildProject = ts.createProject('tsconfig.json', {
-    declaration: true,
-    noLib: true,
-    outDir: 'es6'
-});
+//const tsconfig = require('./tsconfig.json');
 
 function typescriptToES6() {
+    const tsBuildProject = ts.createProject('tsconfig.json', {
+        declaration: true,
+        noLib: true,
+        outDir: 'es6'
+    });
     let result = tsBuildProject.src()
         //.pipe(sourcemaps.init())
         .pipe(ts(tsBuildProject));
@@ -31,9 +31,40 @@ function typescriptToES6() {
 
 function buildES6Dist() {
     let jsFiles = gulp.src('dist/lib/*.js')
+        .pipe(filter(['*.js', '!*.spec.js']))
         .pipe(gulp.dest('dist/es6'));
+
     let tsFiles = gulp.src('dist/lib/*.d.ts')
+        .pipe(filter(['*.d.ts', '!*.spec.d.ts']))
         .pipe(gulp.dest('dist/es6'));
+    return merge([jsFiles, tsFiles]);
+}
+
+function typescriptToCJS() {
+    const tsBuildProject = ts.createProject('tsconfig.json', {
+        declaration: true,
+        noLib: true,
+        outDir: 'cjs',
+        target: 'ES5',
+        module: 'commonjs'
+    });
+
+    let result = tsBuildProject.src()
+    .pipe(ts(tsBuildProject));
+
+    return merge([
+        result.js.pipe(gulp.dest('dist')),
+        result.dts.pipe(gulp.dest('dist'))
+    ]);
+}
+
+function buildCJSDist() {
+    let jsFiles = gulp.src('dist/lib/*.js')
+        .pipe(filter(['*.js', '!*.spec.js']))
+        .pipe(gulp.dest('dist/cjs'));
+    let tsFiles = gulp.src('dist/lib/*.d.ts')
+        .pipe(filter(['*.d.ts', '!*.spec.d.ts']))
+        .pipe(gulp.dest('dist/cjs'));
     return merge([jsFiles, tsFiles]);
 }
 
@@ -64,15 +95,22 @@ gulp.task('build/ts-to-es6', typescriptToES6);
 
 gulp.task('build/lib-to-es6', buildES6Dist);
 
+gulp.task('build/ts-to-cjs', typescriptToCJS);
+
+gulp.task('build/lib-to-cjs', buildCJSDist);
+
 gulp.task('test', testES6);
 
 gulp.task('build', (done) => {
     runSequence(
         'delete-dist',
         'build/ts-to-es6',
-        //'build/lib-to-es6',
-        //'clean-up',
         'test',
+        'build/lib-to-es6',
+        'clean-up',
+        'build/ts-to-cjs',
+        'build/lib-to-cjs',
+        'clean-up',
         done
     )
 });

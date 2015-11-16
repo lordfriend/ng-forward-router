@@ -2,9 +2,10 @@
   "name": "ng-forward-router",
   "version": "0.0.1",
   "description": "A plugin for ng-forward which enables using ui-router with decorator",
-  "main": "index.js",
+  "main": "./cjs/ui-router.js",
+  "jsnext:main": "./es6/ui-router.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tsd install && gulp build"
   },
   "author": "",
   "license": "ISC",
