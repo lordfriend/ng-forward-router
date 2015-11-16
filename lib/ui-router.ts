@@ -16,7 +16,9 @@ export function bootstrap(component: any, otherProviders?: any[] = []): any {
     decoratedModule.config(['$stateProvider', '$controllerProvider', ($stateProvider: any, $controllerProvider: any) => {
         Object.keys(stateConfigStore).forEach((stateName: string) => {
             $stateProvider.state(stateName, stateConfigStore[stateName]);
-            $controllerProvider.register(stateConfigStore[stateName].controller.name, stateConfigStore[stateName]);
+            if(stateConfigStore[stateName].controller) {
+                $controllerProvider.register(stateConfigStore[stateName].controller.name, stateConfigStore[stateName]);
+            }
         });
     }]);
 
