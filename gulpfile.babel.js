@@ -87,6 +87,14 @@ function cleanDistFolder() {
     ]);
 }
 
+function moveMiscToDist() {
+    return gulp.src([
+        './package.json',
+        './README.md'
+    ])
+        .pipe(gulp.dest('./dist'));
+}
+
 gulp.task('delete-dist', deleteDistFolder);
 
 gulp.task('clean-up', cleanDistFolder);
@@ -101,6 +109,8 @@ gulp.task('build/lib-to-cjs', buildCJSDist);
 
 gulp.task('test', testES6);
 
+gulp.task('build/move-misc-files', moveMiscToDist);
+
 gulp.task('build', (done) => {
     runSequence(
         'delete-dist',
@@ -111,6 +121,7 @@ gulp.task('build', (done) => {
         'build/ts-to-cjs',
         'build/lib-to-cjs',
         'clean-up',
+        'build/move-misc-files',
         done
     )
 });
