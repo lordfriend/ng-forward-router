@@ -2,7 +2,7 @@
 
 A plugin for ng-forward which enables using ui-router with decorator
 
-**Deprecated** ngForward has already develop an @StateConfig decorator in current release. It is suggested using the build-in @StateConfig of ngForward.
+**DEPRECATED** ngForward has already added a @StateConfig decorator in current release. It is suggested using the build-in @StateConfig of ngForward.
 
 ##Usage
 
